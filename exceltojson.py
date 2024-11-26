@@ -9,6 +9,7 @@ from openpyxl import load_workbook
 
 from vbrsupport.dicjsontools import merge_dict, save_json_file
 from vbrsupport.misctools import get_args
+from vbrsupport.misctools import force_stdout_encoding
 
 output = []
 
@@ -24,6 +25,7 @@ def create_nested_dict(key_list, value):
 
 
 if __name__ == "__main__":
+    force_stdout_encoding()
     args_def = [(['-f', '--inputfile'     ], {'action':'store', 'required':True, 'help':'Input Filename (xlsx) of the table',   'metavar':'xxx.xlsx'}),
                 (['-w', '--inputworksheet'], {'action':'store', 'required':True, 'help':'Input worksheet name',                 'metavar':'xxx'     }),
                 (['-t', '--inputtable'    ], {'action':'store', 'required':True, 'help':'Input table name',                     'metavar':'xxx'     }),
