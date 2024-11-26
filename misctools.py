@@ -5,6 +5,7 @@ support library to ease development
 - open with file preservation
 - input argument management
 - command line execution
+- Handling stdout encoding to match PYTHONIOENCODING envvar (needed when bundling python script in a exe)
 ...
 """
 
@@ -251,6 +252,27 @@ def copy_to_clipboard(input_str: str):
     """
     subprocess.run(['clip.exe'], input=input_str.strip().encode('utf-16'), check=True)
 
+def force_stdout_encoding():
+    """
+        If program is running in piping mode (and not in terminal mode), check if stdout encoding matches
+        PYTHONIOENCODING environment variable. If not, enforce stdout to its value.
+    """
+    if sys.stdout.isatty() is False:
+        # piping mode > try to read PYTHONIOENCODING. If it is not defined (=False), nothing to do.
+        try:
+            python_io_encoding = str(os.environ["PYTHONIOENCODING"])
+            # replace utf8 per utf-8 to allow comparing with current stdout encoding (utf8 and utf-8 values seem interchangeable)
+            if python_io_encoding.lower() == "utf8":
+                python_io_encoding = "utf-8"
+        except KeyError:
+            python_io_encoding = False
+
+        if python_io_encoding is not False:
+            if str(sys.stdout.encoding) != python_io_encoding:
+                # PYTHONIOENCODING differing from stdout encoding.
+                # This should normally not happen unless PyInstaller is still broken. Setting hard utf-8 workaround
+                sys.stdout.flush()  # to ensure anything already sent to stdout is displayed
+                sys.stdout = open(sys.stdout.fileno(), 'w', encoding='utf-8', closefd=False)
 
 def execute_cmd(cmd, stderr = None, abort_on_error = False, log_error=False):
     """Execute a command line in a separate subprocess and return the STD OUT
