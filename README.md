@@ -1,0 +1,1 @@
+Collection of python functions used a bit everywhere

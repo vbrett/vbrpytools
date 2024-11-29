@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "vbrsupport"
+authors = [
+  { name="Vincent Brettnacher", email="vincent.brettnacher@veoneer.com" },
+]
+description = "Package grouping functions that I'm using in multiple places"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers"
+]
+dynamic = ["dependencies", "version"]
+
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools_scm]
