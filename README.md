@@ -106,6 +106,7 @@ Available as executable script.
 
 ```bash
 exceltojson *args*
+python -m exceltojson *args*
 ```
 
 ## License

@@ -23,8 +23,9 @@ def create_nested_dict(key_list, value):
         value = {k:  value}
     return value
 
-
-if __name__ == "__main__":
+def _exceltojson():
+    ''' Entry point of this module
+    '''
     force_stdout_encoding()
     args_def = [(['-f', '--inputfile'     ], {'action':'store', 'required':True, 'help':'Input Filename (xlsx) of the table',   'metavar':'xxx.xlsx'}),
                 (['-w', '--inputworksheet'], {'action':'store', 'required':True, 'help':'Input worksheet name',                 'metavar':'xxx'     }),
@@ -60,3 +61,6 @@ if __name__ == "__main__":
         output.append(output_entry)
 
     save_json_file(output, args.outputfile)
+
+if __name__ == "__main__":
+    _exceltojson()
