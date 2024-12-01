@@ -2,6 +2,8 @@
 requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
+[project.scripts]
+exceltojson = "vbrsupport:exceltojson"
 
 [project]
 name = "vbrsupport"
@@ -17,7 +19,6 @@ classifiers = [
     "Intended Audience :: Developers"
 ]
 dynamic = ["dependencies", "version"]
-
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
