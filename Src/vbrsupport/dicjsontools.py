@@ -1,6 +1,6 @@
 """
 support library to ease dict & JSON management
-- dictionary extraction & merge
+- dictionary manipulation (extraction, merge, ...)
 - json file load, save, update
 """
 
@@ -95,6 +95,20 @@ def merge_dict(dict_a, dict_b, path=None, list_conflict:str=None, overwrite_conf
         else:
             raise vbrExceptions.OtherException('Conflict at', '.'.join(path + [str(key)]))
     return dict_a
+
+
+def create_nested_dict(keys, last_key_val):
+    ''' Creates a dic from a list of key by nesting them
+
+    @args:
+        keys:           list of keys to nest
+        last_key_val:   value of the last key
+    '''
+    value = last_key_val
+    for key in reversed(keys):
+        value = {key:  value}
+    return value
+
 
 def dict_keys_to_int(dict_a):
     """transform all relevant dictionary keys from string to integer

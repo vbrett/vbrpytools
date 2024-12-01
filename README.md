@@ -74,7 +74,7 @@ misctools.parse_str_date(string)
 ### dicjsontools
 
 Support library to ease dict & JSON management:
-* dictionary extraction & merge
+* dictionary manipulation (extraction, merge, ...)
 * json file load, save, update
 
 ```python
@@ -85,6 +85,9 @@ dicjsontools.sub_dict(dic, key, subkeys)
 
 # merges 2 dictionaries, dict_b into dict_a
 dicjsontools.merge_dict(dic_a, dic_b, options)
+
+# Creates a dic from a list of key by nesting them
+dicjsontools.create_nested_dict(keys, last_key_val)
 
 # transform all relevant dictionary keys from string to integer
 dicjsontools.dict_keys_to_int(dic)

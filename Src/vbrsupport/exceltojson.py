@@ -7,21 +7,9 @@ json structure based on column names
 '''
 from openpyxl import load_workbook
 
-from vbrsupport.dicjsontools import merge_dict, save_json_file
+from vbrsupport.dicjsontools import merge_dict, save_json_file, create_nested_dict
 from vbrsupport.misctools import get_args
 from vbrsupport.misctools import force_stdout_encoding
-
-output = []
-
-def create_nested_dict(key_list, value):
-    ''' Creates a dic entry that is nested
-    '''
-    tree_dict = {}
-    for key in reversed(key_list):
-        tree_dict = {key: tree_dict}
-    for k in reversed(key_list):
-        value = {k:  value}
-    return value
 
 def _exceltojson():
     ''' Entry point of this module
@@ -47,7 +35,7 @@ def _exceltojson():
             if (cell_value is not None) and (cell_value != '') and (name[0] != '#'):
                 keys = name.split('.')
 
-                'Detect multi value content'
+                # Detect multi value content
                 if keys[-1][0] == '[' and keys[-1][-1] == ']':
                     keys[-1] = keys[-1][1:-1]
                     if str(cell_value).isnumeric():
