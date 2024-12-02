@@ -1,12 +1,16 @@
 # vbrsupport
 
-vbrsupport is a Python library of general functions that I start using a bit everywhere.
+vbrsupport is a Python library of general functions that I use in all my other packages.
 
 ## Installation
 
 ### Normal Usage
 
-Use the local package manager [TBD](TBD) to install vbrsupport.
+| :warning:  Be sure to have either one of the environment variable defined before installing this package:   |
+|----------------------------------------------|
+| **PIP_EXTRA_INDEX_URL** used when defining a local pip server where packages are managed |
+| **PIP_FIND_LINKS** pointing when defining a local folder where packages are archived |
+
 
 ```bash
 pip install vbrsupport
@@ -14,14 +18,14 @@ pip install vbrsupport
 
 ### Development Mode
 
-ref: [pypa development mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
-
 * Clone of the project repo
 * Create a python venv in the cloned project
 * In this venv, install the package as editable
   ```bash
   pip install --editable .
   ```
+
+ref: [pypa development mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
 
 ## Usage
 
@@ -114,4 +118,4 @@ python -m exceltojson *args*
 
 ## License
 
-[Veoneer TBD](TBD)
+ref: [LICENSE](.\LICENSE)
