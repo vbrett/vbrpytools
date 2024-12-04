@@ -3,10 +3,10 @@ requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-exceltojson = "vbrsupport.exceltojson:_exceltojson"
+exceltojson = "vbrtools.exceltojson:_exceltojson"
 
 [project]
-name = "vbrsupport"
+name = "vbrtools"
 authors = [
   { name="Vincent Brettnacher", email="vincent.brettnacher@veoneer.com" },
 ]

@@ -21,7 +21,7 @@ from datetime import datetime
 
 import humanize
 
-from vbrsupport import exceptions as vbrExceptions
+from vbrtools import exceptions as vbrExceptions
 
 
 # ARGS & VERBOSE RELATED FUNCTIONS

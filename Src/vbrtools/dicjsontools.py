@@ -7,8 +7,8 @@ support library to ease dict & JSON management
 import json
 from datetime import datetime
 
-from vbrsupport import exceptions as vbrExceptions
-from vbrsupport.misctools import open_preserve
+from vbrtools import exceptions as vbrExceptions
+from vbrtools.misctools import open_preserve
 
 
 

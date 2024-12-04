@@ -7,9 +7,9 @@ json structure based on column names
 '''
 from openpyxl import load_workbook
 
-from vbrsupport.dicjsontools import merge_dict, save_json_file, create_nested_dict
-from vbrsupport.misctools import get_args
-from vbrsupport.misctools import force_stdout_encoding
+from vbrtools.dicjsontools import merge_dict, save_json_file, create_nested_dict
+from vbrtools.misctools import get_args
+from vbrtools.misctools import force_stdout_encoding
 
 def _exceltojson():
     ''' Entry point of this module

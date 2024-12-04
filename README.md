@@ -1,6 +1,6 @@
-<font size="8">vbrsupport</font>
+<font size="8">vbrtools</font>
 
-vbrsupport is a Python library of general functions that I use in all my other packages.
+vbrtools is a Python library of general functions that I use in all my other packages.
 
 - [Installation](#installation)
 - [Use Package](#use-package)
@@ -16,7 +16,7 @@ vbrsupport is a Python library of general functions that I use in all my other p
 # Installation
 
 ```bash
-pip install vbrsupport
+pip install vbrtools
 ```
 
 ⚠️ **This package is not available in Python Package Index (pyPI)**  
@@ -41,7 +41,7 @@ Support library to ease development
 * Handling stdout encoding to match PYTHONIOENCODING envvar (needed when bundling python script in a exe)
 
 ```python
-from vbrsupport import misctools
+from vbrtools import misctools
 
 # decorator to manage verbose & display execution information
 @misctools.with_verbose
@@ -81,7 +81,7 @@ Support library to ease dict & JSON management:
 * json file load, save, update
 
 ```python
-from vbrsupport import dicjsontools
+from vbrtools import dicjsontools
 
 # Retrieve a subdict of a given dic "master" key
 dicjsontools.sub_dict(dic, key, subkeys)
@@ -151,4 +151,4 @@ And you're done!
 # License
 
 ref: [LICENSE](.\LICENSE)
-`vbrsupport` is distributed under the terms of MIT.
+`vbrtools` is distributed under the terms of MIT.

@@ -4,7 +4,7 @@ test misc functions
 
 import time
 
-from vbrsupport import misctools
+from vbrtools import misctools
 
 if __name__ == "__main__":
     l = range(1, 80, 1)
