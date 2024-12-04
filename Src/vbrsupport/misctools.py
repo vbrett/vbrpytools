@@ -11,6 +11,7 @@ support library to ease development
 
 import os
 import sys
+import random
 import subprocess
 import traceback
 import inspect
@@ -146,7 +147,17 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     fill = '█'
     empty = '-'
     # Revolving character parameters
-    revolving_char = ['-', '\\', '|', '/']
+    revolving_char_list = [['-', '\\', '|', '/'],
+                           [" ",".","o","O","*"," "],
+                           ['•●•', '••●', '●••'],
+                           ["( ●  )","(  ● )","(   ●)","(  ● )","( ●  )","(●   )"],
+                           ["⢎ ","⠎⠁","⠊⠑","⠈⠱"," ⡱","⢀⡰","⢄⡠","⢆⡀"],
+                           ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'],
+                           ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"],
+                           ["⠁","⠂","⠄","⡀","⡈","⡐","⡠","⣀","⣁","⣂","⣄","⣌","⣔","⣤","⣥","⣦","⣮","⣶","⣷","⣿","⡿","⠿","⢟","⠟","⡛","⠛","⠫","⢋","⠋","⠍","⡉","⠉","⠑","⠡","⢁"],
+                           ["🕛","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚"]
+                          ]
+    revolving_char = revolving_char_list[random.randrange(0, len(revolving_char_list))]
 
     def print_progress(iteration):
         ''' Progress Printing Function, use -1 to print final progress
@@ -161,7 +172,7 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
 
         if total == -1:
             # total length is not known > print a revolving character
-            progress = f'({revolving_char[actual_iteration % len(revolving_char)]})'
+            progress = f'{revolving_char[actual_iteration % len(revolving_char)]}'
         else:
             # total length is known > print a progress bar
             percent = ("{0:." + str(decimals) + "f}").format(100 * (actual_iteration / float(total)))
