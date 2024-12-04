@@ -1,37 +1,36 @@
-# vbrsupport
+<font size="8">vbrsupport</font>
 
 vbrsupport is a Python library of general functions that I use in all my other packages.
 
-## Installation
+- [Installation](#installation)
+- [Use Package](#use-package)
+  - [misctools](#misctools)
+  - [dicjsontools](#dicjsontools)
+  - [exceltojson](#exceltojson)
+- [Develop Package](#develop-package)
+- [Build Package](#build-package)
+  - [Install Build environment](#install-build-environment)
+  - [Create Package distribution](#create-package-distribution)
+- [License](#license)
 
-### Normal Usage
-
-| :warning:  Be sure to have either one of the environment variable defined before installing this package:   |
-|----------------------------------------------|
-| **PIP_EXTRA_INDEX_URL** used when defining a local pip server where packages are managed |
-| **PIP_FIND_LINKS** pointing when defining a local folder where packages are archived |
-
+# Installation
 
 ```bash
 pip install vbrsupport
 ```
 
-### Development Mode
+⚠️ **This package is not available in Python Package Index (pyPI)**  
+Be sure to have one of these environment variables defined to the local repository of this package before installing it:
+| variable   | usage  |
+| -------- | ------- |
+| *PIP_EXTRA_INDEX_URL* | used when defining a local pip server where packages are managed |
+| *PIP_FIND_LINKS* | pointing when defining a local folder where packages are archived |
 
-* Clone of the project repo
-* Create a python venv in the cloned project
-* In this venv, install the package as editable
-  ```bash
-  pip install --editable .
-  ```
-
-ref: [pypa development mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
-
-## Usage
+# Use Package
 
 Functions are grouped in the following modules:
 
-### misctools
+## misctools
 
 Support library to ease development
 * verbose management
@@ -75,7 +74,7 @@ misctools.query_yes_no(question)
 misctools.parse_str_date(string)
 ```
 
-### dicjsontools
+## dicjsontools
 
 Support library to ease dict & JSON management:
 * dictionary manipulation (extraction, merge, ...)
@@ -106,7 +105,7 @@ dicjsontools.append_json_file(filename, dic)
 dicjsontools.save_json_file(dic, filename)
 ```
 
-### exceltojson
+## exceltojson
 
 Open an excel file table and save it as a json file
 Available as executable script.
@@ -116,6 +115,40 @@ exceltojson *args*
 python -m exceltojson *args*
 ```
 
-## License
+# Develop Package
+
+* Clone the project repo
+* Create a python venv in the cloned project
+* In this venv, install the [package as editable](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
+  ```bash
+  pip install --editable .
+  ```
+* Treat yourself!
+
+# Build Package
+
+This package uses [setuptools](https://setuptools.pypa.io/) to build release package.
+
+## Install Build environment
+
+You need to install the build package
+```bash
+pip install build
+```
+
+## Create Package distribution
+
+From a command line in the root directory of this project, launch build
+```bash
+py -m build
+```
+
+And you're done!  
+2 formats are created:
+* sdist (.tar.gz archive)
+* wheel (.whl archive)
+
+# License
 
 ref: [LICENSE](.\LICENSE)
+`vbrsupport` is distributed under the terms of MIT.
