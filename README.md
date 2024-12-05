@@ -138,15 +138,18 @@ pip install build
 
 ## Create Package distribution
 
-From a command line in the root directory of this project, launch build
-```bash
-py -m build
-```
+1. Commit all changes in your repository and add a version tag
 
-And you're done!  
-2 formats are created:
-* sdist (.tar.gz archive)
-* wheel (.whl archive)
+1. Package version will be retrieved from last git commit.  
+   So it is important that working directory is not dirty and that last commit is tagged.
+
+1. Execute:
+    ```bash
+    py -m build
+    ```
+    2 formats are created:
+    * sdist (.tar.gz archive)
+    * wheel (.whl archive)
 
 # License
 
