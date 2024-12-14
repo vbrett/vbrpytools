@@ -1,6 +1,6 @@
 ''' testing stuff
 '''
-from vbrtools.dicjsontools import create_nested_dict
+from vbrpytools.dicjsontools import create_nested_dict
 
 
 if __name__ == "__main__":
