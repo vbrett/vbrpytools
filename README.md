@@ -127,29 +127,52 @@ python -m exceltojson *args*
 
 # Build Package
 
-This package uses [setuptools](https://setuptools.pypa.io/) to build release package.
+This package is built with [Hatch](https://hatch.pypa.io).
 
 ## Install Build environment
 
-You need to install the build package
-```bash
-pip install build
-```
+See [Hatch installation](https://hatch.pypa.io/latest/install/).
+
+It is recommanded to have hatch installed either using installer or as a python package in isolated environment using pipx.
+
+* <ins>*Installer method*<ins>
+
+  ⚠️ **This requires admin rights.**
+
+  Download and run the installer using the standard Windows msiexec program, specifying one of the `.msi` files as the source. Use the `/passive` and `/i` parameters to request an unattended, normal installation.
+
+  `msiexec /passive /i https://github.com/pypa/hatch/releases/latest/download/hatch-x64.msi`
+
+* <ins>*Python package method*<ins>
+
+  ⚠️ **This requires Python to be installed.**
+
+  [pipx](https://pipx.pypa.io/) allows for the global installation of Python applications in isolated environments.
+
+  1. [Install](https://pipx.pypa.io/stable/installation/) pipx:\
+  `py -m pip install --user pipx`
+
+  1. It is possible (even most likely) the above finishes with a WARNING looking similar to this:\
+  `WARNING: The script pipx.exe is installed in '<USER folder>\AppData\Roaming\Python\Python3x\Scripts' which is not on PATH`\
+  If so, go to the mentioned folder, allowing you to run the pipx executable directly. Enter the following line (even if you did not get the warning):\
+  `.\pipx.exe ensurepath`\
+  This will add necessary paths to your search path. Restart your terminal session and verify pipx does run.
+
+  1. install hatch using this command:\
+    `pipx install hatch`
 
 ## Create Package distribution
 
-1. Commit all changes in your repository and add a version tag
+From a command line in the root directory of this project, launch build
+```bash
+hatch build -t sdist -t wheel -t pyinstaller
+```
 
-1. Package version will be retrieved from last git commit.  
-   So it is important that working directory is not dirty and that last commit is tagged.
-
-1. Execute:
-    ```bash
-    py -m build
-    ```
-    2 formats are created:
-    * sdist (.tar.gz archive)
-    * wheel (.whl archive)
+And you're done!  
+3 formats are created:
+* sdist (.tar.gz archive)
+* wheel (.whl archive)
+* binary (.exe archive)
 
 # License
 
