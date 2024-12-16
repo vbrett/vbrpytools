@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-pyinstaller==1.1.0"]
+requires = ["hatchling", "hatch-pyinstaller>=1.1.0.dev1"]
 build-backend = "hatchling.build"
 
 [project.scripts]
