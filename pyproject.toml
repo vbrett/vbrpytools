@@ -12,7 +12,6 @@ scriptname = "src/vbrpytools/exceltojson.py"
 
 [project]
 name = "vbrpytools"
-# dynamic = ["version", "dependencies"]  # dependencies cannot be set dynamic because of error with pyinstaller
 dynamic = ["version"]
 dependencies = ["humanize>=4.10.0", "openpyxl>=3.1.5"]
 description = "Package grouping functions that I'm using in multiple places"

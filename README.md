@@ -2,18 +2,14 @@
 
 vbrpytools is a Python library of general functions that I use in all my other packages.
 
-- [Installation](#installation)
+- [Install Package](#install-package)
 - [Use Package](#use-package)
   - [misctools](#misctools)
   - [dicjsontools](#dicjsontools)
   - [exceltojson](#exceltojson)
-- [Develop Package](#develop-package)
-- [Build Package](#build-package)
-  - [Install Build environment](#install-build-environment)
-  - [Create Package distribution](#create-package-distribution)
 - [License](#license)
 
-# Installation
+# Install Package
 
 ```bash
 pip install vbrpytools
@@ -114,65 +110,6 @@ Available as executable script.
 exceltojson *args*
 python -m exceltojson *args*
 ```
-
-# Develop Package
-
-* Clone the project repo
-* Create a python venv in the cloned project
-* In this venv, install the [package as editable](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
-  ```bash
-  pip install --editable .
-  ```
-* Treat yourself!
-
-# Build Package
-
-This package is built with [Hatch](https://hatch.pypa.io).
-
-## Install Build environment
-
-See [Hatch installation](https://hatch.pypa.io/latest/install/).
-
-It is recommanded to have hatch installed either using installer or as a python package in isolated environment using pipx.
-
-* <ins>*Installer method*<ins>
-
-  ⚠️ **This requires admin rights.**
-
-  Download and run the installer using the standard Windows msiexec program, specifying one of the `.msi` files as the source. Use the `/passive` and `/i` parameters to request an unattended, normal installation.
-
-  `msiexec /passive /i https://github.com/pypa/hatch/releases/latest/download/hatch-x64.msi`
-
-* <ins>*Python package method*<ins>
-
-  ⚠️ **This requires Python to be installed.**
-
-  [pipx](https://pipx.pypa.io/) allows for the global installation of Python applications in isolated environments.
-
-  1. [Install](https://pipx.pypa.io/stable/installation/) pipx:\
-  `py -m pip install --user pipx`
-
-  1. It is possible (even most likely) the above finishes with a WARNING looking similar to this:\
-  `WARNING: The script pipx.exe is installed in '<USER folder>\AppData\Roaming\Python\Python3x\Scripts' which is not on PATH`\
-  If so, go to the mentioned folder, allowing you to run the pipx executable directly. Enter the following line (even if you did not get the warning):\
-  `.\pipx.exe ensurepath`\
-  This will add necessary paths to your search path. Restart your terminal session and verify pipx does run.
-
-  1. install hatch using this command:\
-    `pipx install hatch`
-
-## Create Package distribution
-
-From a command line in the root directory of this project, launch build
-```bash
-hatch build -t sdist -t wheel -t pyinstaller
-```
-
-And you're done!  
-3 formats are created:
-* sdist (.tar.gz archive)
-* wheel (.whl archive)
-* binary (.exe archive)
 
 # License
 
