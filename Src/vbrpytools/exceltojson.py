@@ -15,10 +15,11 @@ def _exceltojson():
     ''' Entry point of this module
     '''
     force_stdout_encoding()
-    args_def = [(['-f', '--inputfile'     ], {'action':'store', 'required':True, 'help':'Input Filename (xlsx) of the table',   'metavar':'xxx.xlsx'}),
-                (['-w', '--inputworksheet'], {'action':'store', 'required':True, 'help':'Input worksheet name',                 'metavar':'xxx'     }),
-                (['-t', '--inputtable'    ], {'action':'store', 'required':True, 'help':'Input table name',                     'metavar':'xxx'     }),
-                (['-o', '--outputfile'    ], {'action':'store', 'required':True, 'help':'Output Filename (json)',               'metavar':'xxx.json'})
+    args_def = [(['-f', '--inputfile'     ], {'action':'store',                       'required':True , 'help':'Input Filename (xlsx) of the table',                           'metavar':'xxx.xlsx'}),
+                (['-w', '--inputworksheet'], {'action':'store',                       'required':True , 'help':'Input worksheet name',                                         'metavar':'xxx'     }),
+                (['-t', '--inputtable'    ], {'action':'store',                       'required':True , 'help':'Input table name',                                             'metavar':'xxx'     }),
+                (['-o', '--outputfile'    ], {'action':'store',                       'required':True , 'help':'Output Filename (json)',                                       'metavar':'xxx.json'}),
+                (['-p', '--preserve'      ], {'action':'store_true', 'default':False, 'required':False, 'help':'if set and output file exists, rename it by adding timestamp'                      }),
                ]
     args = get_args(args_def)
 
@@ -30,8 +31,8 @@ def _exceltojson():
     output = []
     for row in in_range[1:]: #skip first row which is the header
         output_entry = {}
-        for name, rowCell in zip(column_names, row):
-            cell_value = rowCell.value
+        for name, row_cell in zip(column_names, row):
+            cell_value = row_cell.value
             if (cell_value is not None) and (cell_value != '') and (name[0] != '#'):
                 keys = name.split('.')
 
@@ -48,7 +49,7 @@ def _exceltojson():
 
         output.append(output_entry)
 
-    save_json_file(output, args.outputfile)
+    save_json_file(output, args.outputfile, preserve=args.preserve)
 
 if __name__ == "__main__":
     _exceltojson()
