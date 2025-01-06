@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-pyinstaller>=1.1.0.dev1"]
+requires = ["hatchling", "hatch-pyinstaller>=1.1.0.dev2"]
 build-backend = "hatchling.build"
 
 [project.scripts]
@@ -7,8 +7,10 @@ exceltojson = "vbrpytools.exceltojson:_exceltojson"
 
 [tool.hatch.build.targets.pyinstaller]
 require-runtime-dependencies = true
-flags = ["--clean", "--onefile"]
+flags = ["--clean", "--onefile", "--noconfirm"]
 scriptname = "src/vbrpytools/exceltojson.py"
+specpath = "./.spec"
+zip = true
 
 [project]
 name = "vbrpytools"
