@@ -122,16 +122,19 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
         suffix      - Optional - ''   : suffix string (Str)
 
     @kwargs:
-        display_pb  - Optional - True : choose to iterate with or without
-                                        displaying the progress bar(bool)
+        display_pb          - Optional - True : choose to iterate with or without
+                                                displaying the progress bar(bool)
+        revolving_char_id   - Optional - None : id of the revolving char to use.
+                                                Random id if not defined
+                                                if > number of revolving char, get using modulo %
 
     @constants:
-        print_end       - Hidden  - '\r'  : end character (e.g. "\r") (Str)
-        decimals        - Hidden  - 2     : (only for progress bar)    positive number of decimals in percent complete (Int)
-        length          - Hidden  - 50    : (only for progress bar)    character length of bar (Int)
-        fill            - Hidden  - '█'   : (only for progress bar)    bar fill character (Str)
-        empty           - Hidden  - '-'   : (only for progress bar)    bar empty character (Str)
-        revolving_char  - Hidden  - '-\|/': (only for revolving char ) character sequence to create the revolving character (list)
+        print_end           - Hidden  - '\r'  : end character (e.g. "\r") (Str)
+        decimals            - Hidden  - 2     : (only for progress bar)    positive number of decimals in percent complete (Int)
+        length              - Hidden  - 50    : (only for progress bar)    character length of bar (Int)
+        fill                - Hidden  - '█'   : (only for progress bar)    bar fill character (Str)
+        empty               - Hidden  - '-'   : (only for progress bar)    bar empty character (Str)
+        revolving_char_list - Hidden  - [[.]] : (only for revolving char ) list of character sequences to create a revolving character (list of list of char)
     """
     stdout_on_console = sys.stdout.isatty()
     try:
@@ -147,17 +150,20 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     fill = '█'
     empty = '-'
     # Revolving character parameters
-    revolving_char_list = [['-', '\\', '|', '/'],
-                           [" ",".","o","O","*"," "],
-                           ['•●•', '••●', '●••'],
+    revolving_char_list = [['-', '-', '\\', '\\', '|', '|', '/', '/'],
+                           [".",".","o","o","O","O","*","*"," "," "],
+                           ['•●•', '•●•', '••●', '••●', '●••', '●••'],
                            ["( ●  )","(  ● )","(   ●)","(  ● )","( ●  )","(●   )"],
                            ["⢎ ","⠎⠁","⠊⠑","⠈⠱"," ⡱","⢀⡰","⢄⡠","⢆⡀"],
-                           ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'],
+                           ['⣷','⣯','⣟','⡿','⢿','⣻','⣽','⣾'],
                            ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"],
                            ["⠁","⠂","⠄","⡀","⡈","⡐","⡠","⣀","⣁","⣂","⣄","⣌","⣔","⣤","⣥","⣦","⣮","⣶","⣷","⣿","⡿","⠿","⢟","⠟","⡛","⠛","⠫","⢋","⠋","⠍","⡉","⠉","⠑","⠡","⢁"],
                            ["🕛","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚"]
                           ]
-    revolving_char = revolving_char_list[random.randrange(0, len(revolving_char_list))]
+    revolving_char = revolving_char_list[kwargs.get('revolving_char_id',
+                                                    random.randrange(0, len(revolving_char_list)))
+                                         % len(revolving_char_list)
+                                        ]
 
     def print_progress(iteration):
         ''' Progress Printing Function, use -1 to print final progress
