@@ -15,13 +15,6 @@ vbrpytools is a Python library of general functions that I use in all my other p
 pip install vbrpytools
 ```
 
-⚠️ **This package is not available in Python Package Index (pyPI)**  
-Be sure to have one of these environment variables defined to the local repository of this package before installing it:
-| variable   | usage  |
-| -------- | ------- |
-| *PIP_EXTRA_INDEX_URL* | used when defining a local pip server where packages are managed |
-| *PIP_FIND_LINKS* | pointing when defining a local folder where packages are archived |
-
 # Use Package
 
 Functions are grouped in the following modules:

@@ -20,7 +20,7 @@ description = "Package grouping functions that I'm using in multiple places"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
-keywords = []
+keywords = ["tools", "utilities","personal","development"]
 authors = [
   { name="Vincent Brettnacher", email="vincent.brettnacher@veoneer.com" },
 ]
@@ -29,6 +29,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: Microsoft :: Windows :: Windows 10",
     "Operating System :: Microsoft :: Windows :: Windows 11",
     "Intended Audience :: Developers",
@@ -36,13 +37,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "TBD"
-Documentation = "TBD"
-Download = "TBD"
-LocalPyIndex = "TBD"
-Repository = "TBD"
-Issues = "TBD"
-Changelog = "TBD"
+Documentation = "https://github.com/vbrett/vbrpytools/blob/master/README.md"
+source = "https://github.com/vbrett/vbrpytools"
+Repository = "https://github.com/vbrett/vbrpytools.git"
+Issues = "https://github.com/vbrett/vbrpytools/issues"
 
 [tool.hatch.version]
 path = "src/vbrpytools/__init__.py"
