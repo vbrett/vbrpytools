@@ -15,7 +15,7 @@ import random
 import subprocess
 import traceback
 import inspect
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawTextHelpFormatter
 from functools import wraps
 from datetime import datetime
 
@@ -203,6 +203,22 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     # Print final progress
     print_progress(-1)
 
+class Colors:
+    """Colors for the terminal"""
+    PURPLE = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    ENDC = '\033[0m'
+
+def colorize(text: str, color):
+    """Colorize text"""
+    return f"{color}{text}{Colors.ENDC}"
+
 
 
 # MISC FUNCTIONS
@@ -240,7 +256,7 @@ def get_args(args_def, display_value = True):
         args_def         - Required - [([args], {kwargs}), ...] - list of tuples for each argument to define and handled
         display_value    - Optional - bool                      - if true, display read values
     """
-    parser = ArgumentParser()
+    parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
     for args, kwargs in args_def:
         parser.add_argument(*args, **kwargs)
     args = parser.parse_args()

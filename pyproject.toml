@@ -1,5 +1,7 @@
 [build-system]
-requires = ["hatchling", "hatch-pyinstaller>=1.1.0.dev2"]
+requires = ["hatchling",
+            "hatch-pyinstaller>=1.1.0.dev2",
+            "hatch-semver"]
 build-backend = "hatchling.build"
 
 [project.scripts]
@@ -18,7 +20,7 @@ dynamic = ["version"]
 dependencies = ["humanize>=4.10.0", "openpyxl>=3.1.5"]
 description = "Package grouping functions that I'm using in multiple places"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {file = "LICENSE"}
 keywords = ["tools", "utilities","personal","development"]
 authors = [
@@ -27,7 +29,7 @@ authors = [
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Operating System :: Microsoft :: Windows :: Windows 10",
@@ -44,3 +46,4 @@ Issues = "https://github.com/vbrett/vbrpytools/issues"
 
 [tool.hatch.version]
 path = "src/vbrpytools/__init__.py"
+scheme = "semver"

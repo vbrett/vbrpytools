@@ -1,9 +1,9 @@
 """ Package init
 """
 import sys
-min_ver = (3,9)
+min_ver = (3,10)
 if sys.version_info < min_ver :
     raise ValueError(f'incompatible python version. {min_ver} at least needed.',
                      sys.version_info)
 
-__version__ = "v3.2.0.post0"
+__version__ = "v3.3.0"
