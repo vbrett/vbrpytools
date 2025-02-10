@@ -11,6 +11,7 @@ support library to ease development
 
 import os
 import sys
+from msvcrt import getch, kbhit
 import random
 import subprocess
 import traceback
@@ -203,6 +204,31 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     # Print final progress
     print_progress(-1)
 
+
+def _isansitty() -> bool:
+    """ Check if terminal supports ANSI escape codes
+    The response to \x1B[6n should be \x1B[{line};{column}R according to
+    https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797. If this
+    doesn't work, then it is unlikely ANSI escape codes are supported.
+    """
+    while kbhit():                         # clear stdin before sending escape in
+        getch()                            # case user accidentally presses a key
+
+    sys.stdout.write("\x1B[6n")            # alt: print(end="\x1b[6n", flush=True)
+    sys.stdout.flush()                     # double-buffered stdout needs flush
+
+    sys.stdout.write('\b\b\b\b')           # move cursor back to avoid printing garbage chars in console
+    sys.stdin.flush()                      # flush stdin to make sure escape works
+    if kbhit():                            # ANSI won't work if stdin is empty
+        if ord(getch()) == 27 and kbhit(): # check that response starts with \x1B[
+            if getch() == b"[":
+                while kbhit():             # read stdin again, to remove the actual
+                    getch()                # value returned by the escape
+
+                return sys.stdout.isatty() # lastly, if stdout is a tty, ANSI works
+                                           # so True should be returned. Otherwise,
+    return False                           # return False
+
 class Colors:
     """Colors for the terminal"""
     PURPLE = '\033[95m'
@@ -216,7 +242,9 @@ class Colors:
     ENDC = '\033[0m'
 
 def colorize(text: str, color):
-    """Colorize text"""
+    """Colorize text if possible"""
+    if not _isansitty():
+        return text
     return f"{color}{text}{Colors.ENDC}"
 
 

@@ -50,6 +50,10 @@ misctools.divide_list(list, size)
 # Put the input string in the clipboard
 misctools.copy_to_clipboard(string)
 
+# colorize a string if output in a terminal supporting ANSI escape characters
+misctools.colorize(string)
+misctools.Colors()  # List of supported colors
+
 # If program is running in piping mode enforce stdout encoding to PYTHONIOENCODING.
 misctools.force_stdout_encoding()
 
