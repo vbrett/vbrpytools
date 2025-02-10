@@ -211,6 +211,9 @@ def _isansitty() -> bool:
     https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797. If this
     doesn't work, then it is unlikely ANSI escape codes are supported.
     """
+    if not sys.stdout.isatty():            # if stdout is not a tty, ANSI won't work
+        return False
+
     while kbhit():                         # clear stdin before sending escape in
         getch()                            # case user accidentally presses a key
 
@@ -225,9 +228,8 @@ def _isansitty() -> bool:
                 while kbhit():             # read stdin again, to remove the actual
                     getch()                # value returned by the escape
 
-                return sys.stdout.isatty() # lastly, if stdout is a tty, ANSI works
-                                           # so True should be returned. Otherwise,
-    return False                           # return False
+                return True                # ANSI works so True should be returned.
+    return False                           # Otherwise, return False
 
 class Colors:
     """Colors for the terminal"""
