@@ -1,6 +1,6 @@
 [build-system]
 requires = ["hatchling",
-            "hatch-pyinstaller>=1.1.0.dev2",
+            "hatch-pyinstaller>=1.1.0.dev3",
             "hatch-semver"]
 build-backend = "hatchling.build"
 

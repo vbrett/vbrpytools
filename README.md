@@ -38,6 +38,9 @@ from vbrpytools import misctools
 # Call in a loop to create terminal progress bar or revolving character
 misctools.iterate_and_display_progress(iterable)
 
+# Rename a file by adding a timestamp to its name
+misctools.timestamp_filename(filename)
+
 # Make a copy of an existing file before opening it in write mode + enforce encoding to UTF-8 by default
 misctools.open_preserve(filename)
 

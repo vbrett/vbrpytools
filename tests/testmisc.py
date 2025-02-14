@@ -3,7 +3,7 @@ test misc functions
 '''
 
 # import time
-
+from pathlib import Path
 from vbrpytools import misctools
 
 if __name__ == "__main__":
@@ -17,6 +17,9 @@ if __name__ == "__main__":
     #         time.sleep(0.05)
 
     print(misctools.colorize('This is a test', misctools.Colors.RED))
-    print(misctools.colorize('This is a test', misctools.Colors.RED))
-    print(misctools.colorize('This is a test', misctools.Colors.RED))
-    print(misctools.colorize('This is a test', misctools.Colors.RED))
+    print(misctools.colorize('This is a test', misctools.Colors.BLACK + misctools.Colors.BG_WHITE + misctools.Colors.BOLD))
+    print(misctools.colorize('This is a test', misctools.Colors.ITALIC + misctools.Colors.BG_YELLOW))
+    print(misctools.colorize('This is a test', misctools.Colors.GREEN + misctools.Colors.BG_BLUE))
+
+    tf = misctools.open_preserve(Path("./test_create/test.txt"), "w")
+    tf.close()

@@ -141,7 +141,7 @@ def load_json_file(filename, key_as_int:bool=True, abort_on_file_missing = True)
     """
     try:
         json_data = {}
-        with open(filename, 'r', encoding="utf-8") as file_ptr:
+        with open_preserve(filename, 'r') as file_ptr:
             # read file as raw string, to be able to check if file is empty
             # if this was not done, json dump will raise JSONDecodeError
             file_raw = file_ptr.read()
@@ -190,7 +190,7 @@ def append_json_file(filename, new_data, indent = 4, **kwargs):
     old_data = load_json_file(filename, key_as_int=True)
 
     merge_dict(old_data, new_data, **kwargs)
-    with open(filename, 'w', encoding="utf-8") as file_ptr:
+    with open_preserve(filename, 'w', encoding="utf-8", preserve = False) as file_ptr:
         json.dump(old_data, file_ptr, indent = indent, cls = _JsonCustomEncoder)
 
 

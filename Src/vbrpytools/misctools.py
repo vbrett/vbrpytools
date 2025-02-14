@@ -10,6 +10,7 @@ support library to ease development
 """
 
 import os
+from pathlib import Path
 import sys
 from msvcrt import getch, kbhit
 import random
@@ -232,19 +233,39 @@ def _isansitty() -> bool:
     return False                           # Otherwise, return False
 
 class Colors:
-    """Colors for the terminal"""
-    PURPLE = '\033[95m'
-    BLUE = '\033[94m'
-    CYAN = '\033[96m'
+    """ Colors for the terminal """
+    # Text colors - foreground
+    BLACK = '\033[90m'
+    RED = '\033[91m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
-    RED = '\033[91m'
+    BLUE = '\033[94m'
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+
+    # Text colors - background
+    BG_BLACK = '\033[100m'
+    BG_RED = '\033[101m'
+    BG_GREEN = '\033[102m'
+    BG_YELLOW = '\033[103m'
+    BG_BLUE = '\033[104m'
+    BG_PURPLE = '\033[105m'
+    BG_CYAN = '\033[106m'
+    BG_WHITE = '\033[107m'
+
+    # Text formatting
     BOLD = '\033[1m'
+    DIM = '\033[2m'
+    ITALIC = '\033[3m'
     UNDERLINE = '\033[4m'
+
+    # Reset
     ENDC = '\033[0m'
 
+
 def colorize(text: str, color):
-    """Colorize text if possible"""
+    """ Colorize text if possible """
     if not _isansitty():
         return text
     return f"{color}{text}{Colors.ENDC}"
@@ -253,11 +274,18 @@ def colorize(text: str, color):
 
 # MISC FUNCTIONS
 # ==============
+def timestamp_filename(file):
+    """ Rename a file by adding a timestamp to its name """
+    file = Path(file)
+    if file.exists():
+        # rename existing file by adding timestamp to its name
+        file.rename(file.parent / (file.stem + datetime.now().strftime('_%y-%m-%dT%H.%M.%S') + file.suffix))
 
-def open_preserve(file, mode, *args, encoding='utf-8', preserve = True, **kwargs):
-    ''' Open a file and if mode is write and preserve is requested, existing file
-    is preserved under a different name (= original name + timestamp).
-    Also enforce encoding - to UTF-8 by default
+def open_preserve(file, mode, *args, encoding='utf-8', preserve = True, create_path_if_w = True, **kwargs):
+    ''' Open a file
+    If mode is write and create_path_if_w is requested, create path if it does not exist.
+    If mode is write and preserve is requested, existing file is preserved under a different name (= original name + timestamp).
+    Enforce encoding - to UTF-8 by default
 
     @returns: file object
 
@@ -268,13 +296,18 @@ def open_preserve(file, mode, *args, encoding='utf-8', preserve = True, **kwargs
     preserve -- bool -- True
                 if True and mode is write and file exists
                 rename existing file by adding timestamp to it
+
+    create_path_if_w -- bool -- True
+                if True and mode is write, create path if it does not exist
     same as output
     '''
-    if preserve and 'w' in mode.lower() and os.path.exists(file):
-        # rename existing file by adding timestamp to its name
-        base, ext = os.path.splitext(file)
-        ct = datetime.fromtimestamp(os.path.getmtime(file)).strftime('_%y-%m-%dT%H.%M.%S')
-        os.rename(file, base + ct + ext)
+    file = Path(file)
+    if 'w' in mode.lower():
+        if create_path_if_w and not file.parent.exists():
+            file.parent.mkdir(parents = True, exist_ok = True)
+
+        if preserve :
+            timestamp_filename(file)
 
     return open(file, mode, *args, encoding = encoding, **kwargs)
 
