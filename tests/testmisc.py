@@ -6,7 +6,8 @@ test misc functions
 from pathlib import Path
 from vbrpytools import misctools
 
-if __name__ == "__main__":
+def _main():
+    """Main function to test misc functions."""
     # l = range(1, 80, 1)
     # for n in misctools.iterate_and_display_progress(l, prefix = 'Processing'):
     #     time.sleep(0.02)
@@ -16,10 +17,14 @@ if __name__ == "__main__":
     #     for n in misctools.iterate_and_display_progress(ll, suffix = 'Processing', revolving_char_id = revolve_id):
     #         time.sleep(0.05)
 
-    print(misctools.colorize('This is a test', misctools.Colors.RED))
-    print(misctools.colorize('This is a test', misctools.Colors.BLACK + misctools.Colors.BG_WHITE + misctools.Colors.BOLD))
-    print(misctools.colorize('This is a test', misctools.Colors.ITALIC + misctools.Colors.BG_YELLOW))
-    print(misctools.colorize('This is a test', misctools.Colors.GREEN + misctools.Colors.BG_BLUE))
+    print(misctools.colorize('This text is red', misctools.Colors.RED))
+    print(misctools.colorize('This text is bold on white', misctools.Colors.BLACK + misctools.Colors.BG_WHITE + misctools.Colors.BOLD))
+    print(misctools.colorize('This text is italic on yellow', misctools.Colors.ITALIC + misctools.Colors.BG_YELLOW))
+    print(misctools.colorize('This text is green on blue', misctools.Colors.GREEN + misctools.Colors.BG_BLUE))
 
     tf = misctools.open_preserve(Path("./test_create/test.txt"), "w")
     tf.close()
+
+if __name__ == "__main__":
+    # run the test
+    _main()

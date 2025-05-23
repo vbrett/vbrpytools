@@ -11,6 +11,7 @@ support library to ease development
 
 import os
 from pathlib import Path
+from time import sleep
 import sys
 from msvcrt import getch, kbhit
 import random
@@ -26,8 +27,20 @@ import humanize
 from vbrpytools import exceptions as vbrExceptions
 
 
-# ARGS & VERBOSE RELATED FUNCTIONS
-# ================================
+# VERBOSE RELATED FUNCTIONS
+# =========================
+LOG_START = '>>>'
+LOG_STOP = '<<<'
+REVOLVING_SEQUENCES = [['-', '-', '\\', '\\', '|', '|', '/', '/'],
+                       [".",".","o","o","O","O","*","*"," "," "],
+                       ['•●•', '•●•', '••●', '••●', '●••', '●••'],
+                       ["( ●  )","(  ● )","(   ●)","(  ● )","( ●  )","(●   )"],
+                       ["⢎ ","⠎⠁","⠊⠑","⠈⠱"," ⡱","⢀⡰","⢄⡠","⢆⡀"],
+                       ['⣷','⣯','⣟','⡿','⢿','⣻','⣽','⣾'],
+                       ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"],
+                       ["⠁","⠂","⠄","⡀","⡈","⡐","⡠","⣀","⣁","⣂","⣄","⣌","⣔","⣤","⣥","⣦","⣮","⣶","⣷","⣿","⡿","⠿","⢟","⠟","⡛","⠛","⠫","⢋","⠋","⠍","⡉","⠉","⠑","⠡","⢁"],
+                       ["🕛","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚"],
+                      ]
 
 def with_verbose(func):
     """ decorator to manage verbose & display execution information
@@ -67,42 +80,43 @@ def with_verbose(func):
         kwargs['_next_verbose_lvl'] = max([verbose_lvl - 1, 0])
         kwargs['display_pb'] = kwargs.get('display_pb', True) and (verbose_lvl <= 1) # display pb only if not verbose or last verbose level
         kwargs['verboseprint'] = print if is_verbose else lambda *a, **k: None #function to print verbose
+        try:
+            func_name = func.__name__
+        except AttributeError:
+            func_name = 'function'
 
         # print function name & arguments (minus "self" argument)
         log_repeat = 20
         if is_verbose:
-            log_start = '>>>'
-            print(log_start * log_repeat)
-            print(f"{log_start} {func.__name__}()")
+            print(LOG_START * log_repeat)
+            print(f"{LOG_START} {func_name}()")
             argv_name = inspect.getfullargspec(func).args
             is_method = argv_name[0].lower() == 'self' # Not a very clean way, as it relies on always naming 1st method arg 'self'
             if len(args) > (0 if not is_method else 1):
                 argv_name = argv_name[1:] if is_method else argv_name
                 argv_val = args[1:] if is_method else args
-                print( f'{log_start} args:\n{log_start}    - ' \
-                      + f'\n{log_start}    - '.join([f'{argv_name[i]} : {str(v)}' for i,v in enumerate(argv_val)]))
+                print( f'{LOG_START} args:\n{LOG_START}    - ' \
+                      + f'\n{LOG_START}    - '.join([f'{argv_name[i]} : {str(v)}' for i,v in enumerate(argv_val)]))
             if len(kwargs) > 0:
-                print(f'{log_start} kwargs:\n{log_start}    - ' + f'\n{log_start}    - '.join([f'{k} : {str(v)}' for k, v in kwargs.items()]))
+                print(f'{LOG_START} kwargs:\n{LOG_START}    - ' + f'\n{LOG_START}    - '.join([f'{k} : {str(v)}' for k, v in kwargs.items()]))
             start_time = datetime.now()
-            print(log_start * log_repeat)
+            print(LOG_START * log_repeat)
 
         result = func(*args, **kwargs)
 
         # print function execution time & output
         if is_verbose:
-            log_stop = '<<<'
-            end_time = datetime.now()
-            elapsed_time = end_time - start_time
+            elapsed_time = datetime.now() - start_time
             hum_elapsed_time = humanize.precisedelta(elapsed_time)
-            printed_result = f'{log_stop} Result: ' \
-                           + (f'{str(result)[:int(verbose_truncate/2)]}\n{log_stop} (...)\n{log_stop} {str(result)[-int(verbose_truncate/2):]}'
+            printed_result = f'{LOG_STOP} Result: ' \
+                           + (f'{str(result)[:int(verbose_truncate/2)]}\n{LOG_STOP} (...)\n{LOG_STOP} {str(result)[-int(verbose_truncate/2):]}'
                               if len(str(result)) > verbose_truncate > 0
                               else str(result))
-            print(log_stop * log_repeat)
-            print(f'{log_stop} {func.__name__}()')
-            print(f'{log_stop} Executed in {hum_elapsed_time}')
+            print(LOG_STOP * log_repeat)
+            print(f'{LOG_STOP} {func_name}()')
+            print(f'{LOG_STOP} Executed in {hum_elapsed_time}')
             print(printed_result)
-            print(log_stop * log_repeat)
+            print(LOG_STOP * log_repeat)
 
         return result
     return wrap
@@ -126,9 +140,9 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     @kwargs:
         display_pb          - Optional - True : choose to iterate with or without
                                                 displaying the progress bar(bool)
-        revolving_char_id   - Optional - None : id of the revolving char to use.
+        revolving_seq_id    - Optional - None : id of the revolving sequence to use.
                                                 Random id if not defined
-                                                if > number of revolving char, get using modulo %
+                                                if > number of revolving sequence, get using modulo %
 
     @constants:
         print_end           - Hidden  - '\r'  : end character (e.g. "\r") (Str)
@@ -136,7 +150,6 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
         length              - Hidden  - 50    : (only for progress bar)    character length of bar (Int)
         fill                - Hidden  - '█'   : (only for progress bar)    bar fill character (Str)
         empty               - Hidden  - '-'   : (only for progress bar)    bar empty character (Str)
-        revolving_char_list - Hidden  - [[.]] : (only for revolving char ) list of character sequences to create a revolving character (list of list of char)
     """
     stdout_on_console = sys.stdout.isatty()
     try:
@@ -152,20 +165,10 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     fill = '█'
     empty = '-'
     # Revolving character parameters
-    revolving_char_list = [['-', '-', '\\', '\\', '|', '|', '/', '/'],
-                           [".",".","o","o","O","O","*","*"," "," "],
-                           ['•●•', '•●•', '••●', '••●', '●••', '●••'],
-                           ["( ●  )","(  ● )","(   ●)","(  ● )","( ●  )","(●   )"],
-                           ["⢎ ","⠎⠁","⠊⠑","⠈⠱"," ⡱","⢀⡰","⢄⡠","⢆⡀"],
-                           ['⣷','⣯','⣟','⡿','⢿','⣻','⣽','⣾'],
-                           ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"],
-                           ["⠁","⠂","⠄","⡀","⡈","⡐","⡠","⣀","⣁","⣂","⣄","⣌","⣔","⣤","⣥","⣦","⣮","⣶","⣷","⣿","⡿","⠿","⢟","⠟","⡛","⠛","⠫","⢋","⠋","⠍","⡉","⠉","⠑","⠡","⢁"],
-                           ["🕛","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚"]
-                          ]
-    revolving_char = revolving_char_list[kwargs.get('revolving_char_id',
-                                                    random.randrange(0, len(revolving_char_list)))
-                                         % len(revolving_char_list)
-                                        ]
+    revolving_seq = REVOLVING_SEQUENCES[kwargs.get('revolving_seq_id',
+                                                   random.randrange(0, len(REVOLVING_SEQUENCES)))
+                                        % len(REVOLVING_SEQUENCES)
+                                       ]
 
     def print_progress(iteration):
         ''' Progress Printing Function, use -1 to print final progress
@@ -180,7 +183,7 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
 
         if total == -1:
             # total length is not known > print a revolving character
-            progress = f'{revolving_char[actual_iteration % len(revolving_char)]}'
+            progress = f'{revolving_seq[actual_iteration % len(revolving_seq)]}'
         else:
             # total length is known > print a progress bar
             percent = ("{0:." + str(decimals) + "f}").format(100 * (actual_iteration / float(total)))
@@ -220,6 +223,7 @@ def _isansitty() -> bool:
 
     sys.stdout.write("\x1B[6n")            # alt: print(end="\x1b[6n", flush=True)
     sys.stdout.flush()                     # double-buffered stdout needs flush
+    sleep(0.000001)                        # wait 1usec to ensure kbhit will catch the response
 
     sys.stdout.write('\b\b\b\b')           # move cursor back to avoid printing garbage chars in console
     sys.stdin.flush()                      # flush stdin to make sure escape works

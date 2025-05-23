@@ -1,33 +1,35 @@
-<font size="8">vbrpytools</font>
+# vbrpytools
 
 vbrpytools is a Python library of general functions that I use in all my other packages.
 
-- [Install Package](#install-package)
-- [Use Package](#use-package)
-  - [misctools](#misctools)
-  - [dicjsontools](#dicjsontools)
-  - [exceltojson](#exceltojson)
-- [License](#license)
+- [vbrpytools](#vbrpytools)
+  - [Install Package](#install-package)
+  - [Use Package](#use-package)
+    - [misctools](#misctools)
+    - [dicjsontools](#dicjsontools)
+    - [exceltojson](#exceltojson)
+  - [License](#license)
 
-# Install Package
+## Install Package
 
 ```bash
 pip install vbrpytools
 ```
 
-# Use Package
+## Use Package
 
 Functions are grouped in the following modules:
 
-## misctools
+### misctools
 
 Support library to ease development
-* verbose management
-* progress bar display
-* open with file preservation
-* input argument management
-* command line execution
-* Handling stdout encoding to match PYTHONIOENCODING envvar (needed when bundling python script in a exe)
+
+- verbose management
+- progress bar display
+- open with file preservation
+- input argument management
+- command line execution
+- Handling stdout encoding to match PYTHONIOENCODING envvar (needed when bundling python script in a exe)
 
 ```python
 from vbrpytools import misctools
@@ -70,11 +72,12 @@ misctools.query_yes_no(question)
 misctools.parse_str_date(string)
 ```
 
-## dicjsontools
+### dicjsontools
 
 Support library to ease dict & JSON management:
-* dictionary manipulation (extraction, merge, ...)
-* json file load, save, update
+
+- dictionary manipulation (extraction, merge, ...)
+- json file load, save, update
 
 ```python
 from vbrpytools import dicjsontools
@@ -101,7 +104,7 @@ dicjsontools.append_json_file(filename, dic)
 dicjsontools.save_json_file(dic, filename)
 ```
 
-## exceltojson
+### exceltojson
 
 Open an excel file table and save it as a json file
 Available as executable script.
@@ -111,7 +114,7 @@ exceltojson *args*
 python -m exceltojson *args*
 ```
 
-# License
+## License
 
 ref: [LICENSE](.\LICENSE)
 `vbrpytools` is distributed under the terms of MIT.
