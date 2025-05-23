@@ -2,9 +2,16 @@
 test misc functions
 '''
 
-# import time
+from time import sleep
 from pathlib import Path
 from vbrpytools import misctools
+
+
+@misctools.with_waiting_message(progress_message = 'doing stuff', end_message = 'stuff is done !')
+def test_func(nbr):
+    """Test function to simulate a long-running process."""
+    for i in range(nbr):
+        sleep(1)
 
 def _main():
     """Main function to test misc functions."""
@@ -24,6 +31,8 @@ def _main():
 
     tf = misctools.open_preserve(Path("./test_create/test.txt"), "w")
     tf.close()
+
+    test_func(10)
 
 if __name__ == "__main__":
     # run the test

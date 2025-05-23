@@ -37,8 +37,14 @@ from vbrpytools import misctools
 # decorator to manage verbose & display execution information
 @misctools.with_verbose
 
+# decorator to execute a function through run_and_display_progress (see below)
+@misctools.with_waiting_message
+
 # Call in a loop to create terminal progress bar or revolving character
 misctools.iterate_and_display_progress(iterable)
+
+# Call a function in a separate thread and display a progress message while executing
+misctools.run_and_display_progress(func)
 
 # Rename a file by adding a timestamp to its name
 misctools.timestamp_filename(filename)

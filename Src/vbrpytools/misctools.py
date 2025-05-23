@@ -10,6 +10,7 @@ support library to ease development
 """
 
 import os
+from threading import Thread
 from pathlib import Path
 from time import sleep
 import sys
@@ -121,6 +122,24 @@ def with_verbose(func):
         return result
     return wrap
 
+
+def with_waiting_message(**deco_kwargs):
+    """ decorator to display a moving waiting message while executing
+
+    @kwargs:
+        see run_and_display_progress
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*func_args, **func_kwargs):
+            return run_and_display_progress(target=func,
+                                            target_args=func_args,
+                                            target_kwargs=func_kwargs,
+                                            **deco_kwargs)
+        return wrapper
+    return decorator
+
+
 def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
     r"""
     Call in a loop to create terminal progress bar or revolving character
@@ -207,6 +226,88 @@ def iterate_and_display_progress(iterable, prefix = '', suffix = '', **kwargs):
 
     # Print final progress
     print_progress(-1)
+
+def run_and_display_progress(target, target_args=(), target_kwargs=None,
+                             **kwargs):
+    """ Run a target function in a separate thread and return function return value once complete.
+    If stdout is a tty, display a revolving sequence during execution.
+
+    @return: target return value
+
+    @args
+        target:         function to run in a separate thread
+        target_args:    arguments to pass to the target function
+        target_kwargs:  keyword arguments to pass to the target function
+
+    @kwargs:
+        progress_message    - Optional - 'executing <function name>': message string (Str) displayed during progress
+        end_message         - Optional - '<function name> executed' : message string (Str) displayed once execution is complete, overwriting the progress message
+        wait_time           - Optional - 0.2s                       : time to wait between checks if the thread is still alive
+        revolving_seq_id    - Optional - None                       : id of the revolving sequence to use.
+                                                                      Random id if not defined
+                                                                      if > number of revolving sequence, get using modulo %
+    """
+    stdout_on_console = sys.stdout.isatty()
+
+    class ThreadWithReturn(Thread):
+        """ Custom Thread class that returns the target function return value """
+        def __init__(self, group=None, target=None, name=None,
+                     target_args=(), target_kwargs=None, daemon=None):
+            """ Custom Thread class that returns the target function return value """
+            # Initializing the Thread class
+            super().__init__(group=group, target=target, name=name,
+                             args=target_args, kwargs=target_kwargs, daemon=daemon)
+            self._return = None
+
+        def run(self):
+            """ Overriding Thread.run function to retrieve the target function return value """
+            try:
+                if self._target is not None:
+                    self._return = self._target(*self._args, **self._kwargs)
+            finally:
+                # Avoid a refcycle if the thread is running a function with
+                # an argument that has a member that points to the thread.
+                del self._target, self._args, self._kwargs
+
+        def join(self, timeout=None):
+            """ Overriding Thread.join function to pass the target function return value """
+            super().join(timeout)
+            return self._return
+
+    try:
+        target_name = target.__name__
+    except AttributeError:
+        target_name = 'target'
+
+    progress_message = kwargs.get('progress_message', f"Executing {target_name}")
+    end_message = kwargs.get('end_message', f"{target_name} executed.")
+    wait_time = kwargs.get('wait_time', 0.2)
+    revolving_seq_id = kwargs.get('revolving_seq_id', random.randrange(0, len(REVOLVING_SEQUENCES))) % len(REVOLVING_SEQUENCES)
+
+    revolving_seq = REVOLVING_SEQUENCES[revolving_seq_id]
+    prev_progress_len = 0
+    actual_iteration = 0
+    return_val = None
+
+    # Create a thread to run the target function
+    thread = ThreadWithReturn(target = target, target_args = target_args, target_kwargs = target_kwargs)
+    thread.start()
+    # Wait for the thread to finish
+    while thread.is_alive():
+        if stdout_on_console:
+            progress = ' '.join(['\r', progress_message, revolving_seq[actual_iteration % len(revolving_seq)]])
+             # add spaces to erase trailing characters on a tty
+            progress += ' ' * max([0, prev_progress_len - len(progress)])
+            prev_progress_len = len(progress)
+            print(progress, end='\r', flush=True)
+            actual_iteration += 1
+        return_val = thread.join(wait_time)
+
+    if stdout_on_console:
+        # add spaces to erase trailing characters on a tty
+        end_message += ' ' * max([0, prev_progress_len - len(end_message)])
+    print(end_message)
+    return return_val
 
 
 def _isansitty() -> bool:
