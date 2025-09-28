@@ -324,7 +324,7 @@ def _isansitty() -> bool:
 
     sys.stdout.write("\x1B[6n")            # alt: print(end="\x1b[6n", flush=True)
     sys.stdout.flush()                     # double-buffered stdout needs flush
-    sleep(0.000001)                        # wait 1usec to ensure kbhit will catch the response
+    sleep(0.000005)                        # wait 5usec to ensure kbhit will catch the response
 
     sys.stdout.write('\b\b\b\b')           # move cursor back to avoid printing garbage chars in console
     sys.stdin.flush()                      # flush stdin to make sure escape works
