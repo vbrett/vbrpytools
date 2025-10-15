@@ -4,3 +4,9 @@
 **/*.spec
 **/test_create
 **/outputs
+**/.venv
+**/venv
+**/.vscode/
+**/.venv*/
+**/__pycache__
+~*.xlsx
