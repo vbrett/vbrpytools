@@ -14,7 +14,9 @@ from threading import Thread
 from pathlib import Path
 from time import sleep
 import sys
-from msvcrt import getch, kbhit
+from platform import system
+if system() == 'Windows':
+    from msvcrt import getch, kbhit
 import random
 import subprocess
 import traceback
@@ -311,13 +313,16 @@ def run_and_display_progress(target, target_args=(), target_kwargs=None,
 
 
 def _isansitty() -> bool:
-    """ Check if terminal supports ANSI escape codes
+    """ Check if terminal supports ANSI escape codes - only works on Windows
     The response to \x1B[6n should be \x1B[{line};{column}R according to
     https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797. If this
     doesn't work, then it is unlikely ANSI escape codes are supported.
     """
     if not sys.stdout.isatty():            # if stdout is not a tty, ANSI won't work
         return False
+
+    if system() != 'Windows':              # if not Windows, assume ANSI works
+        return True
 
     while kbhit():                         # clear stdin before sending escape in
         getch()                            # case user accidentally presses a key
