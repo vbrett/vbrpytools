@@ -34,8 +34,26 @@ class ExcelWorkbook():
                 return ws
         return None
 
-    def dict_from_table(self, table_name):
+    def get_table(self, table_name):
+        ''' Get the table object
+        '''
+        ws = self.table_ws(table_name)
+        if ws is None:
+            return None
+        return ws.tables[table_name]
+
+    def dict_from_table(self, table_name,
+                        nested = True, with_ignored = False):
         ''' Create a dictionary from an excel table
+            column names are used as keys with the following rules:
+                - dot '.' indicates dictionary structure - ignored if nested is False
+                - name under braket "[...]" indicates semicolon ";" separated multi-value data
+                - name starting with hash '#' is ignored - unless with_ignored is True
+        Args:
+            table_name (str): name of the table in the excel file
+            nested (bool): if True, create nested dictionary based on column names
+        Returns:
+            list of dictionary: each entry corresponds to a row in the table
         '''
 
         ws = self.table_ws(table_name)
@@ -48,12 +66,18 @@ class ExcelWorkbook():
             output_entry = {}
             for name, row_cell in zip(column_names, row):
                 cell_value = row_cell.value
-                if (cell_value is not None) and (cell_value != '') and (name[0] != '#'):
-                    keys = name.split('.')
+                if (cell_value is not None) and (cell_value != '') and\
+                   ((name[0] != '#') or with_ignored):
+                    if name[0] == '[' and name[-1] == ']':
+                        multivalue = True
+                        name = name[1:-1]
+                    else:
+                        multivalue = False
+
+                    keys = name.split('.') if nested else [name]
 
                     # Detect multi value content
-                    if keys[-1][0] == '[' and keys[-1][-1] == ']':
-                        keys[-1] = keys[-1][1:-1]
+                    if multivalue:
                         if str(cell_value).isnumeric():
                             cell_value = [cell_value]
                         else:
