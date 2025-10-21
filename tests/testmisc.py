@@ -10,7 +10,7 @@ from vbrpytools import misctools
 @misctools.with_waiting_message(progress_message = 'doing stuff', end_message = 'stuff is done !')
 def test_func(nbr):
     """Test function to simulate a long-running process."""
-    for i in range(nbr):
+    for _ in range(nbr):
         sleep(1)
 
 def _main():
@@ -29,10 +29,14 @@ def _main():
     print(misctools.colorize('This text is italic on yellow', misctools.Colors.ITALIC + misctools.Colors.BG_YELLOW))
     print(misctools.colorize('This text is green on blue', misctools.Colors.GREEN + misctools.Colors.BG_BLUE))
 
-    tf = misctools.open_preserve(Path("./test_create/test.txt"), "w")
-    tf.close()
+    str1 = "testing more stuff"
+    str2 = ["with", "multiple", "arguments", "123", "45.67"]
+    print('executing', misctools.colorize(str(str1), misctools.Colors.YELLOW), misctools.colorize(' '.join(str2), misctools.Colors.CYAN))
 
-    test_func(10)
+    # tf = misctools.open_preserve(Path("./test_create/test.txt"), "w")
+    # tf.close()
+
+    # test_func(10)
 
 if __name__ == "__main__":
     # run the test
