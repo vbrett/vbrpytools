@@ -5,7 +5,7 @@ requires = ["hatchling",
 build-backend = "hatchling.build"
 
 [project.scripts]
-exceltojson = "vbrpytools.exceltojson:_exceltojson"
+exceltojson = "vbrpytools.exceltojson:_main"
 
 [tool.hatch.build.targets.pyinstaller]
 require-runtime-dependencies = true
