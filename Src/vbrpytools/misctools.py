@@ -423,16 +423,22 @@ def open_preserve(file, mode, *args, encoding='utf-8', preserve = True, create_p
     return open(file, mode, *args, encoding = encoding, **kwargs)
 
 
-def get_args(args_def, display_value = True):
+def get_args(arg_list, display_value = True, excl_arg_lists = None):
     """ all-in-one argument definition, parse & read
     @returns - namespace - parsed args
     @args:
-        args_def         - Required - [([args], {kwargs}), ...] - list of tuples for each argument to define and handled
-        display_value    - Optional - bool                      - if true, display read values
+        arg_list         - Required - [([args], {kwargs}), ...]        - list of tuples for each argument to define and handled
+        display_value    - Optional - bool                             - if true, display read values
+        excl_arg_lists   - Optional - [[([args], {kwargs}), ...],... ] - list of lists of tuples for each argument to define and handled that are mutually exclusive
     """
     parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
-    for args, kwargs in args_def:
+    for args, kwargs in arg_list:
         parser.add_argument(*args, **kwargs)
+    if excl_arg_lists:
+        for excl_args in excl_arg_lists:
+            excl_group = parser.add_mutually_exclusive_group()
+            for args, kwargs in excl_args:
+                excl_group.add_argument(*args, **kwargs)
     args = parser.parse_args()
 
     if display_value:
