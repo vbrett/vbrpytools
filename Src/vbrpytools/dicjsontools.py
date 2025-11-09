@@ -5,7 +5,7 @@ support library to ease dict & JSON management
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, time
 
 from vbrpytools import exceptions as vbrExceptions
 from vbrpytools.misctools import open_preserve
@@ -170,10 +170,12 @@ class _JsonCustomEncoder(json.JSONEncoder):
             return list(o)
         if isinstance(o, datetime):
             return o.isoformat()
+        if isinstance(o, time):
+            return o.isoformat()
         return json.JSONEncoder.default(self, o)
 
 
-def append_json_file(filename, new_data, indent = 4, **kwargs):
+def append_json_file(filename, new_data, indent = 4, preserve=True, **kwargs):
     """Append a json dictionary to an existing json file
     recurse in all keys.
     Supports empty file
@@ -183,6 +185,8 @@ def append_json_file(filename, new_data, indent = 4, **kwargs):
         filename:       file where to store content
         new_data:       content to put in file
         indent:         formating of json file
+        preserve:       if True and if {output_file_base}.json exists
+                        rename existing by adding timestamp to it
 
     @keyword_args:
         All Optional keyword arguments that merge_dict() takes.
@@ -190,7 +194,7 @@ def append_json_file(filename, new_data, indent = 4, **kwargs):
     old_data = load_json_file(filename, key_as_int=True)
 
     merge_dict(old_data, new_data, **kwargs)
-    with open_preserve(filename, 'w', encoding="utf-8", preserve = False) as file_ptr:
+    with open_preserve(filename, 'w', encoding="utf-8", preserve = preserve) as file_ptr:
         json.dump(old_data, file_ptr, indent = indent, cls = _JsonCustomEncoder)
 
 
