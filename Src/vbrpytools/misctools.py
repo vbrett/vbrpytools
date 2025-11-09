@@ -15,8 +15,6 @@ from pathlib import Path
 from time import sleep
 import sys
 from platform import system
-if system() == 'Windows':
-    from msvcrt import getch, kbhit
 import random
 import subprocess
 import traceback
@@ -28,6 +26,9 @@ from datetime import datetime
 import humanize
 
 from vbrpytools import exceptions as vbrExceptions
+
+if system() == 'Windows':
+    from msvcrt import getch, kbhit
 
 
 # VERBOSE RELATED FUNCTIONS
@@ -324,8 +325,8 @@ def _isansitty() -> bool:
     if system() != 'Windows':              # if not Windows, assume ANSI works
         return True
 
-    while kbhit():                         # clear stdin before sending escape in
-        getch()                            # case user accidentally presses a key
+    while kbhit():                         # clear stdin before sending escape in   #pylint: disable=E0606  #only called in windows
+        getch()                            # case user accidentally presses a key   #pylint: disable=E0606  #only called in windows
 
     sys.stdout.write("\x1B[6n")            # alt: print(end="\x1b[6n", flush=True)
     sys.stdout.flush()                     # double-buffered stdout needs flush
