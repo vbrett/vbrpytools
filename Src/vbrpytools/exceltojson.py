@@ -8,7 +8,7 @@ json structure based on column names
 
 from openpyxl import load_workbook
 
-from vbrpytools.dicjsontools import merge_dict, save_json_file, create_nested_dict
+from vbrpytools.dicjsontools import merge_dict, append_json_file, save_json_file, create_nested_dict
 from vbrpytools.misctools import get_args
 from vbrpytools.misctools import force_stdout_encoding
 
@@ -94,15 +94,19 @@ def _main():
     '''
     force_stdout_encoding()
     args_def = [(['-f', '--inputfile'     ], {'action':'store',                       'required':True , 'help':'Input Filename (xlsx) of the table',                           'metavar':'xxx.xlsx'}),
-                (['-t', '--inputtable'    ], {'action':'store',                       'required':True , 'help':'Input table name',                                             'metavar':'xxx'     }),
+                (['-t', '--inputtable'    ], {'action':'store',                       'required':True , 'help':'list of comma separated input table names',                    'metavar':'xxx,yyy' }),
                 (['-o', '--outputfile'    ], {'action':'store',                       'required':True , 'help':'Output Filename (json)',                                       'metavar':'xxx.json'}),
                 (['-p', '--preserve'      ], {'action':'store_true', 'default':False, 'required':False, 'help':'if set and output file exists, rename it by adding timestamp'                      }),
+                (['-a', '--append'        ], {'action':'store_true', 'default':False, 'required':False, 'help':'if set and output file exists, append new content to it'                           }),
                ]
     args = get_args(args_def)
 
     wb = ExcelWorkbook(args.inputfile)
-    output = wb.dict_from_table(args.inputtable)
-    save_json_file(output, args.outputfile, preserve=args.preserve)
+    output = {table_name: wb.dict_from_table(table_name) for table_name in args.inputtable.split(',')}
+    if args.append:
+        append_json_file(args.outputfile, output, preserve=args.preserve)
+    else:
+        save_json_file(output, args.outputfile, preserve=args.preserve)
 
 if __name__ == "__main__":
     _main()
