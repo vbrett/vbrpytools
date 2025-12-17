@@ -5,6 +5,7 @@ support library to ease dict & JSON management
 """
 
 import json
+from pathlib import Path
 from datetime import datetime, time
 
 from vbrpytools import exceptions as vbrExceptions
@@ -161,18 +162,22 @@ def load_json_file(filename, key_as_int:bool=True, abort_on_file_missing = True)
 class _JsonCustomEncoder(json.JSONEncoder):
     ''' Custom json encoder to bypass default encoder not supporting:
         - set
-        - datetime
+        - datetime & time
+        - Path
     '''
     def default(self, o):
         ''' force set to list
         '''
-        if isinstance(o, set):
-            return list(o)
-        if isinstance(o, datetime):
-            return o.isoformat()
-        if isinstance(o, time):
-            return o.isoformat()
-        return json.JSONEncoder.default(self, o)
+        match o:
+            case set():
+                return list(o)
+            case datetime() | time():
+                return o.isoformat()
+            case Path():
+                return str(o)
+
+            case _:
+                return json.JSONEncoder.default(self, o)
 
 
 def append_json_file(filename, new_data, indent = 4, preserve=True, **kwargs):
