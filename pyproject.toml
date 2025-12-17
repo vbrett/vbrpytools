@@ -17,7 +17,7 @@ zip = true
 [project]
 name = "vbrpytools"
 dynamic = ["version"]
-dependencies = ["humanize>=4.10.0", "openpyxl>=3.1.5"]
+dependencies = ["humanize>=4.14.0", "openpyxl>=3.1.5"]
 description = "Package grouping functions that I'm using in multiple places"
 readme = "README.md"
 requires-python = ">=3.10"

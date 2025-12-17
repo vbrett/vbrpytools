@@ -330,7 +330,7 @@ def _isansitty() -> bool:
 
     sys.stdout.write("\x1B[6n")            # alt: print(end="\x1b[6n", flush=True)
     sys.stdout.flush()                     # double-buffered stdout needs flush
-    sleep(0.000005)                        # wait 5usec to ensure kbhit will catch the response
+    sleep(0.00001)                         # wait 10usec to ensure kbhit will catch the response
 
     sys.stdout.write('\b\b\b\b')           # move cursor back to avoid printing garbage chars in console
     sys.stdin.flush()                      # flush stdin to make sure escape works
@@ -423,15 +423,16 @@ def open_preserve(file, mode, *args, encoding='utf-8', preserve = True, create_p
     return open(file, mode, *args, encoding = encoding, **kwargs)
 
 
-def get_args(arg_list, display_value = True, excl_arg_lists = None):
+def get_args(arg_list, excl_arg_lists = None, description = None, display_value = True):
     """ all-in-one argument definition, parse & read
     @returns - namespace - parsed args
     @args:
         arg_list         - Required - [([args], {kwargs}), ...]        - list of tuples for each argument to define and handled
-        display_value    - Optional - bool                             - if true, display read values
         excl_arg_lists   - Optional - [[([args], {kwargs}), ...],... ] - list of lists of tuples for each argument to define and handled that are mutually exclusive
+        description      - Optional - str                              - description of the program
+        display_value    - Optional - bool                             - if true, print read values
     """
-    parser = ArgumentParser(formatter_class=RawTextHelpFormatter)
+    parser = ArgumentParser(formatter_class=RawTextHelpFormatter, description=description)
     for args, kwargs in arg_list:
         parser.add_argument(*args, **kwargs)
     if excl_arg_lists:
