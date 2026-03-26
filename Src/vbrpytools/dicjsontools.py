@@ -6,7 +6,8 @@ support library to ease dict & JSON management
 
 import json
 from pathlib import Path
-from datetime import datetime, time
+from enum import Enum
+from datetime import date, datetime, time
 
 from vbrpytools import exceptions as vbrExceptions
 from vbrpytools.misctools import open_preserve
@@ -171,8 +172,10 @@ class _JsonCustomEncoder(json.JSONEncoder):
         match o:
             case set():
                 return list(o)
-            case datetime() | time():
+            case datetime() | time() | date():
                 return o.isoformat()
+            case Enum():
+                return o.value
             case Path():
                 return str(o)
 
